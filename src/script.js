@@ -9,9 +9,9 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 // Create raw NormalMaterial
-const geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
 const material = new THREE.MeshNormalMaterial();
-const mesh = new THREE.Mesh( geometry, material );
+const mesh = new THREE.Mesh(geometry, material);
 
 scene.add(mesh)
 
@@ -30,7 +30,7 @@ window.addEventListener('resize', () => {
 
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
-    
+
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
@@ -62,12 +62,11 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 // Rotation animation
 const ThreeClock = new THREE.Clock()
-const rotate = () =>
-{
+const rotate = () => {
     const elapsedTime = ThreeClock.getElapsedTime()
 
     mesh.rotation.x = elapsedTime - (Math.PI * 0.5);
-	mesh.rotation.y = elapsedTime - (Math.PI * 0.5);
+    mesh.rotation.y = elapsedTime - (Math.PI * 0.5);
 
     controls.update()
     renderer.render(scene, camera)
