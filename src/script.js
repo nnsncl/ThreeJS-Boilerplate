@@ -1,6 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
+import * as dat from 'dat.gui';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
+// Debug 
+const gui = new dat.GUI();
 
 // Trigger canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -8,12 +12,37 @@ const canvas = document.querySelector('canvas.webgl')
 // Declare a scene
 const scene = new THREE.Scene()
 
+// Textures
+const textureLoader = new THREE.TextureLoader()
+const matcapTexture = textureLoader.load('/matcaps/1.png')
+
 // Create raw NormalMaterial
-const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-const material = new THREE.MeshNormalMaterial();
-const mesh = new THREE.Mesh(geometry, material);
+const torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 64, 128)
+const material = new THREE.MeshMatcapMaterial()
+const mesh = new THREE.Mesh(torusGeometry, material)
+
+material.flatShading = true
+material.matcap = matcapTexture
 
 scene.add(mesh)
+        
+for(let i =0; i < 100; i++) {
+
+    const normalMaterial = new THREE.MeshNormalMaterial()
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 64, 64)
+    const torus = new THREE.Mesh(sphereGeometry, normalMaterial)
+
+    torus.position.x = (Math.random() - 0.5) * 10
+    torus.position.y = (Math.random() - 0.5) * 10
+    torus.position.z = (Math.random() - 0.5) * 10
+
+    torus.rotation.x = (Math.random() - 0.5) * 10
+    torus.rotation.y = (Math.random() - 0.5) * 10
+
+    const randomScale = Math.random()
+    torus.scale.set(randomScale, randomScale, randomScale)
+    scene.add(torus)
+}
 
 
 // Handle screen resizing
@@ -45,7 +74,8 @@ window.addEventListener('dblclick', () => {
 })
 
 // Set basic camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+const aspectRatio = sizes.width / sizes.height
+const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 100)
 camera.position.z = 1
 scene.add(camera)
 
